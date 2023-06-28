@@ -74,4 +74,5 @@ The reason for this is how resource intensive is comparing Strings in the databa
 For the Team service, it would be a good idea to add the teamLeadId in the get Teams url, as that information is very important to the team data.
 
 For the User service, now that the user role was implemented, it may be necessary to add the roleId to both get User and get Users urls.
+Also it would be good to create an endpoint to receive the new field role. 
 
