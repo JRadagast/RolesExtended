@@ -32,6 +32,9 @@ public class UserRepository {
     private static String QUERY_UPDATE = "UPDATE user SET " +
             " firstName = :FIRSTNAME, lastName = :LASTNAME, idrole = :IDROLE, displayName = :DISPLAYNAME, avatarUrl = :AVATARURL, location = :LOCATION where IDUSER = :IDUSER ";
     
+    private static String QUERY_UPDATE_ROLE = "UPDATE user SET " +
+            " idrole = :IDROLE where IDUSER = :IDUSER ";
+    
     private static String QUERY_FIND_BY_ID = "SELECT * FROM user WHERE iduser = :IDUSER";
     
     @PostConstruct
@@ -94,6 +97,30 @@ public class UserRepository {
 
         return user;
     }
+    
+    /**
+     * Update a user registry
+     * @param user
+     * @return
+     * @throws SQLException 
+     */
+    public User updateRole( User user ) throws SQLException {
+        
+        MapSqlParameterSource params = getParamsUpdateRole( user );
+
+        this.jdbcTemplate.update(QUERY_UPDATE_ROLE, params);
+        
+        User u = null;
+
+        /* Checks if the user has successfully been added to the database */
+        try {
+            u = getById( user.getIduser() );
+        } catch (SQLException ex){
+            ex.printStackTrace();
+        }
+
+        return u;
+    }
 
     /* Defines the namedParameters used when inserting a user. */
     public MapSqlParameterSource getParamsInsert( User user ){
@@ -105,6 +132,15 @@ public class UserRepository {
         params.addValue("DISPLAYNAME", user.getDisplayName() );
         params.addValue("AVATARURL", user.getAvatarUrl() );
         params.addValue("LOCATION", user.getLocation() );
+
+        return params;
+    }
+    
+    /* Defines the namedParameters used when updating a user's role. */
+    public MapSqlParameterSource getParamsUpdateRole( User user ){
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("IDUSER", user.getIduser() );
+        params.addValue("IDROLE", user.getIdrole() );
 
         return params;
     }

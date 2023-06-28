@@ -54,4 +54,24 @@ public class UserService {
             return response;
         }
     }
+    
+    /**
+     * Tries to add user, if user already exist, update it.
+     * @param user
+     * @return 
+     */
+    public ResponseEntity<User> updateRole( User user ){
+        try {
+            User u = repository.updateRole( user );
+
+            ResponseEntity<User> response = new ResponseEntity<User>(u, HttpStatus.OK);
+
+            return response;
+        } catch (SQLException ex){
+
+            ResponseEntity<User> response = new ResponseEntity<User>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return response;
+        }
+    }
 }
